@@ -1,0 +1,35 @@
+(defvar show-power false)
+
+(defwidget power-menu []
+  (box :orientation "v"
+       :space-evenly false
+       :class "power-menu"
+    (button :onclick "systemctl poweroff"          "⏻  Shutdown")
+    (button :onclick "systemctl reboot"            "↺  Reboot")
+    (button :onclick "systemctl suspend"           "⏾  Sleep")
+    (button :onclick "hyprctl dispatch exit 0"     "⇥  Logout")))
+
+(defwidget power-widget []
+  (box :orientation "v"
+       :space-evenly false
+       :halign "end"
+    (button
+      :onclick "eww update show-power=${show-power == 'false'}"
+      :class "power-toggle"
+      "⏻")
+    (revealer
+      :reveal show-power
+      :transition "slidedown"
+      :duration "200ms"
+      (power-menu))))
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry
+    :x "20px" :y "0px"
+    :width "5%"
+    :height "20px"
+    :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  (power-widget))

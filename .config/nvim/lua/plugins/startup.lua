@@ -1,3 +1,4 @@
+
 return {
   "startup-nvim/startup.nvim",
   dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
@@ -27,9 +28,8 @@ return {
     for i, color in ipairs(colors) do
       vim.api.nvim_set_hl(0, "StartupHeader" .. i, { fg = color, bold = true })
     end
-    
+
     local header_lines = {
-      [[                                                                               ]],
       [[                                                                               ]],
       [[   ████╗╗    ███╗╗███╗╗    ███╗╗███╗█████╗     ████╗╗]],
       [[   ██████╗   ███║║███║║    ███║║███║██████╗╗ ██████║║]],
@@ -40,7 +40,7 @@ return {
       [[   ███║  ╚██████║║  ╚██████╔╔╝  ███║███║║ ╚╚═╝╝ ███║║]],
       [[   ╚══╝   ╚╚════╝╝   ╚╚════╝╝   ╚══╝╚╚═╝╝       ╚╚═╝╝]],
     }
-    
+
     require("startup").setup({
       header = {
         type = "text",
@@ -82,60 +82,40 @@ return {
         default_color = "",
         oldfiles_amount = 3,
       },
-      cowsay = {
+
+      -- Replaced the cowsay/quotes section with an editable empty text section.
+      -- Put your custom lines into `content` below.
+      custom_text = {
         type = "text",
-        content = function()
-          -- Note: Randomseed is now handled at the top of config()
-          
-          -- Read quotes from file
-          local quotes = {}
-          -- Ensure this path matches your system
-          local quotes_file = io.open(vim.fn.stdpath("config") .. "/lua/Clover/quotes.txt", "r")
-          if quotes_file then
-            for line in quotes_file:lines() do
-              if line ~= "" then  -- Skip empty lines
-                table.insert(quotes, line)
-              end
-            end
-            quotes_file:close()
-          else
-            quotes = {"Error: quotes.txt not found at ~/.config/nvim/lua/clover/quotes.txt"}
-          end
-          
-          local quote = quotes[math.random(#quotes)]
-          
-          -- Using cowsay with random animal and word wrapping at 60 characters
-          local handle = io.popen("cowsay -f tux -W 60 '" .. quote:gsub("'", "'\\''") .. "'")
-          local result = handle:read("*a")
-          handle:close()
-          
-          local lines = {}
-          for line in result:gmatch("[^\n]+") do
-            table.insert(lines, line)
-          end
-          return lines
-        end,
         oldfiles_directory = false,
         align = "center",
         fold_section = false,
-        title = "",
+        title = "Notes",
         margin = 1,
+        content = {
+		""
+          -- Add your text lines here. Example:
+          -- "Line 1: Welcome to Neovim",
+          -- "Line 2: Edit this file to change the message"
+        },
         highlight = "Comment",
         default_color = "",
         oldfiles_amount = 0,
       },
+
       options = {
         mapping_keys = true,
         cursor_column = 0.5,
         empty_lines_between_mappings = true,
         disable_statuslines = true,
-        paddings = { 0, 0, 2, 4, 0 },  -- recent_files, header, body, cowsay
+        -- paddings order corresponds to recent_files, header, body, custom_text
+        paddings = { 0, 0, 2, 2, 0 },
         after = function()
           vim.schedule(function()
             local buf = vim.api.nvim_get_current_buf()
             if vim.bo[buf].filetype == "startup" then
               local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-              
+
               -- Apply gradient to header
               for line_num, line in ipairs(lines) do
                 if line:match("   ████╗╗    ███╗╗███╗╗    ███╗╗███╗█████╗     ████╗╗") then
@@ -154,7 +134,7 @@ return {
                   break
                 end
               end
-              
+
               -- Enter command mode on startup
               vim.cmd("startinsert")
               vim.cmd("stopinsert")
@@ -174,7 +154,7 @@ return {
         background = "#1f2227",
         folded_section = "#56b6c2",
       },
-      parts = { "recent_files", "header", "body", "cowsay" },
+      parts = { "recent_files", "header", "body", "custom_text" },
     })
   end,
 }

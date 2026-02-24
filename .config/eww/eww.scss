@@ -1,0 +1,21 @@
+.power-toggle {
+  background: transparent;
+  color: white;
+  border: rounded;
+  font-size: 18px;
+}
+
+.power-menu {
+  background: transparent;
+
+  button {
+    color: white;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+}
