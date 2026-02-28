@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Default classes to exclude (lowercase). Add other compositor/daemon classes here.
-DEFAULT_EXCLUDE=(waybar awww hyprpaper swaybg) 
+DEFAULT_EXCLUDE=(waybar awww eww) 
 
 # Optional: set EXCLUDE_CLASSES="class1,class2" in env to add more (comma-separated).
 IFS=',' read -r -a USER_EXCLUDE <<< "${EXCLUDE_CLASSES:-}"
